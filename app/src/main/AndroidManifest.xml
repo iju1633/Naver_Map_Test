@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Map">
+        android:theme="@style/Theme.Map"
+        android:usesCleartextTraffic="true">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -25,18 +26,16 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="@string/google_maps_key" />-->
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="08p166u489" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="Map">
-        </activity>
+            android:name=".RecyclerActivity" />
 
         <activity
             android:name=".MapsNaverActivity"

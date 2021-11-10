@@ -1,10 +1,11 @@
 package com.example.map.dto;
 
-public class ProductItem {
-    public ProductItem(String attraction_name, String address_doro) {
-        this.attraction_name = attraction_name;
-        this.address_doro = address_doro;
-    }
+public class Item {
+
+    private String attraction_name;
+    private String address_doro;
+    private Double latitude;
+    private Double longitude;
 
     public String getAttraction_name() {
         return attraction_name;
@@ -22,27 +23,30 @@ public class ProductItem {
         this.address_doro = address_doro;
     }
 
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    private String attraction_name;
-    private String address_doro;
-    private String latitude;
-    private String longitude;
+    
+    // 생성자
+    public Item(String attraction_name, String address_doro) {
+        this.attraction_name = attraction_name;
+        this.address_doro = address_doro;
+    }
 
+    
 
 
 }

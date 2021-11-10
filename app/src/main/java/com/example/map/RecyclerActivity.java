@@ -1,46 +1,34 @@
 package com.example.map;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.example.map.adapter.RecyclerAdapter;
-import com.example.map.dto.ProductItem;
-
-import java.util.ArrayList;
-
-import javax.security.auth.callback.Callback;
-
+/**
+ * 데이터  ->  어댑터  ->  뷰
+ */
 
 public class RecyclerActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerAdapter recyclerAdapter;
-    private ArrayList<ProductItem> productItems;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler);
+        setContentView(R.layout.recyclerview);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = findViewById(R.id.navermap_recycler_view);
 
-        /* initiate adapter */
-        recyclerAdapter = new RecyclerAdapter();
+        MapsNaverActivity mapsNaverActivity = new MapsNaverActivity();
+        Adapter adapter = new Adapter();
+        for(int i=0; i<mapsNaverActivity.searchedList.size(); i++) {
+            adapter.addItem(mapsNaverActivity.searchedList.get(i));
+        }
 
-        /* initiate recyclerview */
-        recyclerView.setAdapter(recyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));
-        
+        adapter.notifyDataSetChanged();
 
-
-        /* adapt data */
-        recyclerAdapter.setFriendList(productItems);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
     }
 }

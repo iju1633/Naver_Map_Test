@@ -12,7 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.map.dto.ProductItem;
+
+import com.example.map.dto.Item;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
@@ -20,14 +21,9 @@ import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import jxl.Sheet;
@@ -39,6 +35,9 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
 
     private MapView mapView;
     Button button_to_list;
+    ArrayList<Item> searchedList = new ArrayList<>();
+    Item item;
+
 
     // 마커들의 정보가 들어갈 arrayList
     ArrayList<String> attraction_name = new ArrayList<>();
@@ -54,8 +53,8 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
         mapView = findViewById(R.id.mapView);
         mapView.getMapAsync(this);
 
+        // 리스트 조회하기 버튼에 이벤트 등록하기
         button_to_list = findViewById(R.id.button_to_list);
-
         button_to_list.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -118,7 +117,6 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
                         Marker marker = new Marker();
                         marker.setPosition(new LatLng(latitude.get(i), longitude.get(i)));
                         marker.setOnClickListener(this);
-//                        marker.setCaptionText(attraction_name.get(i));
                         marker.setTag(i);
                         marker.setMap(naverMap);
                     }
@@ -132,12 +130,21 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
     @Override
     public boolean onClick(@NonNull Overlay overlay) { // 마커를 click하면, 마커 위에 관광명소 이름을 띄우고 Toast로는 도로면 주소를 출력함
         if(overlay instanceof Marker){
-            // 여기에 이벤트 추가할 것!
-            ProductItem productItem = new ProductItem(attraction_name.get(Integer.parseInt(overlay.getTag().toString())), address_doro.get(Integer.parseInt(overlay.getTag().toString())));
 
+            // caption이 마커 위로 뜨고, 내용은 관광명소 이름이며 Toast로 도로명 주소가 출력된다
             ((Marker) overlay).setCaptionAligns(Align.Top);
             ((Marker) overlay).setCaptionText(attraction_name.get(Integer.parseInt(overlay.getTag().toString())));
             Toast.makeText(getApplicationContext(), address_doro.get(Integer.parseInt(overlay.getTag().toString())), Toast.LENGTH_SHORT).show();
+
+            // 마커 클릭될 때마다 searchedList에 item으로 객체 저장
+
+            item = new Item(attraction_name.get(Integer.parseInt(overlay.getTag().toString())), address_doro.get(Integer.parseInt(overlay.getTag().toString())));
+//            item.setAttraction_name(attraction_name.get(Integer.parseInt(overlay.getTag().toString())));
+//            item.setAddress_doro(address_doro.get(Integer.parseInt(overlay.getTag().toString())));
+//            item.setLatitude(latitude.get(Integer.parseInt(overlay.getTag().toString())));
+//            item.setLongitude(longitude.get(Integer.parseInt(overlay.getTag().toString())));
+
+            searchedList.add(item);
         }
         return false;
     }
