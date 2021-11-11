@@ -14,7 +14,11 @@ import com.example.map.dto.Item;
 import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
-    ArrayList<Item> list = new ArrayList<>();
+    ArrayList<Item> list;
+
+    Adapter(ArrayList<Item> list){
+        this.list = list;
+    }
 
     @NonNull
     @Override
@@ -31,10 +35,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
         // 이렇게 하면 list에 있는 데이터를 알 수 있게 되어 뷰홀더 안에 있는 뷰에 데이터를 설정해줄 수 있다.
     }
 
-//    public void setFriendList(ArrayList<Item> list){
-//        this.list = list;
-//        notifyDataSetChanged();
-//    }
+    public void setData(ArrayList<Item> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     public void addItem(Item item){
         list.add(item);

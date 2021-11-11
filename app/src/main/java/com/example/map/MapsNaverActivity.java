@@ -35,7 +35,7 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
 
     private MapView mapView;
     Button button_to_list;
-    ArrayList<Item> searchedList = new ArrayList<>();
+    public static ArrayList<Item> searchedList;
     Item item;
 
 
@@ -130,6 +130,7 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
     @Override
     public boolean onClick(@NonNull Overlay overlay) { // 마커를 click하면, 마커 위에 관광명소 이름을 띄우고 Toast로는 도로면 주소를 출력함
         if(overlay instanceof Marker){
+            searchedList = new ArrayList<>();
 
             // caption이 마커 위로 뜨고, 내용은 관광명소 이름이며 Toast로 도로명 주소가 출력된다
             ((Marker) overlay).setCaptionAligns(Align.Top);
@@ -139,10 +140,10 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
             // 마커 클릭될 때마다 searchedList에 item으로 객체 저장
 
             item = new Item(attraction_name.get(Integer.parseInt(overlay.getTag().toString())), address_doro.get(Integer.parseInt(overlay.getTag().toString())));
-//            item.setAttraction_name(attraction_name.get(Integer.parseInt(overlay.getTag().toString())));
-//            item.setAddress_doro(address_doro.get(Integer.parseInt(overlay.getTag().toString())));
-//            item.setLatitude(latitude.get(Integer.parseInt(overlay.getTag().toString())));
-//            item.setLongitude(longitude.get(Integer.parseInt(overlay.getTag().toString())));
+            item.setAttraction_name(attraction_name.get(Integer.parseInt(overlay.getTag().toString())));
+            item.setAddress_doro(address_doro.get(Integer.parseInt(overlay.getTag().toString())));
+            item.setLatitude(latitude.get(Integer.parseInt(overlay.getTag().toString())));
+            item.setLongitude(longitude.get(Integer.parseInt(overlay.getTag().toString())));
 
             searchedList.add(item);
         }
