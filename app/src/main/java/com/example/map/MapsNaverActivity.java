@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.room.Room;
 
 
 import com.example.map.dto.Item;
@@ -39,6 +40,9 @@ import jxl.read.biff.BiffException;
 
 
 public class MapsNaverActivity extends Activity implements OnMapReadyCallback, Overlay.OnClickListener {
+
+    // db interface
+    private ItemDao mItemDao;
 
     private MapView mapView;
     Button button_to_list;
@@ -79,6 +83,14 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
 
         locationSource = new FusedLocationSource(this,PERMISSION_REQUEST_CODE);
 
+        //Room Database 관련 코드
+
+        ItemDatabase database = Room.databaseBuilder(getApplicationContext(), ItemDatabase.class, "map")
+                .fallbackToDestructiveMigration()   // 스키마(Database) 버전 변경 가능, db 버전 충돌을 방지하기 위해 recreate하는 방식
+                .allowMainThreadQueries()   // Main Thread에서 DB에 입출력을 가능하게 함, background에서 실행안해도 됨(실무에서는 구현해야 함)
+                .build();
+
+        mItemDao = database.itemDao();   // 인터페이스 객체 할당
     }
 
     @Override
@@ -151,7 +163,7 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
     }
 
     @Override
-    public boolean onClick(@NonNull Overlay overlay) { // 마커를 click하면, 마커 위에 관광명소 이름을 띄우고 Toast로는 도로면 주소를 출력함
+    public boolean onClick(@NonNull Overlay overlay) { // 마커를 click하면, 마커 위에 관광명소 이름을 띄우고 Toast로는 도로면 주소를 출력함 + db에 저장
 
         if(overlay instanceof Marker){ // searchedList가 이 함수 안에서 생성된다면 클릭될 때마다 새로운 객체가 생성되니 뷰에 하나만 나오겠지?(이해)
 
@@ -171,6 +183,9 @@ public class MapsNaverActivity extends Activity implements OnMapReadyCallback, O
                 // click했을 때 마커 색깔, 캡션 크기 증가
                 ((Marker) overlay).setCaptionTextSize(15.0F);
                 ((Marker) overlay).setIconTintColor(Color.BLUE);
+
+                // db에 저장
+                mItemDao.setInsertItem(item);
 
                 searchedList.add(item);
             } else Toast.makeText(getApplicationContext(), "이미 선택하신 마커입니다!", Toast.LENGTH_SHORT).show();
